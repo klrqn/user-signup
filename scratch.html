@@ -1,12 +1,17 @@
 <form>
+    <!-- multiple checkboxes -->
     # multiple checkboxes
     <input type="checkbox" name="one">
     <input type="checkbox" name="two">
     <input type="checkbox" name="three">
     <br>
+
+    <!-- password input -->
     # password input
     <input type="password" name="pw">
     <br>
+
+    <!-- radio buttons -->
     # radio buttons...
     <label> a label
         <input type="radio" name="q" value="one">
@@ -21,13 +26,36 @@
 <form>
     <label>
         Dropdowns
-    </label>
         <select name="dd">
-            <option>one</option>
-            <option>two</option>
-            <option>three</option>
+            <option value="1">the number one</option>
+            <option value="2">the number two</option>
+            <option value="3">the value three</option>
         </select>
+    </label>
 
     <br>
     <input type="submit">
 </form>
+
+<!-- escapes -->
+What if I want to talk about <html> in my browser? <br>
+What if I want to talk about &lt;html&gt; in my browser? <br>
+What if I want to talk about <b> in my browser? <br> </b>
+What if I want to talk about &lt;b&gt; in my browser? <br>
+
+<!-- escape characters running through a string in python -->
+<pre><code>
+def escape_chars(s):
+    for (i,o) in (("&", "&amp;amp;"),
+                  ("<", "&amp;lt;"),
+                  (">", "&ampgt;"),
+                  (""", "&ampquote;"))
+    s = s.replace(i, o)
+</code></pre>
+<p style=color:green;> ### easier way to escape is with import cgi ### </p>
+<pre><code>
+import cgi
+def escape_cgi(s):
+    cgi.escape(s, quote = True)
+</code></pre>
+<p style=color:green;> Much Easier! </p>
