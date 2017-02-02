@@ -46,6 +46,8 @@ class MainHandler(webapp2.RequestHandler):
                      "pw_match":"<b style=color:red;> Passwords don't match </b>",
                      "email":"<b style=color:red;> Not a valid email </b>"}
 
+        # month_abbvs = dict((m[:3].lower(), m) for m in months) Sooooo Pythonic
+
         # get the users input for the 4 fields
         username = self.request.get("username")
         password = self.request.get("password")
