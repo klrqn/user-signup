@@ -54,8 +54,8 @@ class MainHandler(webapp2.RequestHandler):
 
         # verify the inputs
         valid_username = valid.verify_username(username)
-        valid_password = valid.verify_username(password)
-        valid_email = valid.verify_username(email)
+        valid_password = valid.verify_password(password)
+        valid_email = valid.verify_email(email)
 
         if not valid_username:
             self.writeform(username, "", "", email, errorDict["username"])

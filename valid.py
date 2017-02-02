@@ -16,6 +16,6 @@ PW_RE = re.compile("^.{3,20}")
 def verify_password(s):
     return s and PW_RE.match(s)
 
-EMAIL_RE = re.compile("^[\S]+@[\S]+.[\S]+$")
-def verify_email(s):
-    return not s or EMAIL_RE.match(s)
+EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+def verify_email(email):
+    return not email or EMAIL_RE.match(email)
