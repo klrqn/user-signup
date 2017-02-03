@@ -14,9 +14,9 @@ form = """
         <br>
         <label>Password<input type="password" name="password" value={1}></label>{5}
         <br>
-        <label>Password Check<input type="password" name="verify" value={2}></label>
+        <label>Password Check<input type="password" name="verify" value={2}></label>{6}
         <br>
-        <label>Email (optional)<input type="text" name="email" value={3}></label>{6}
+        <label>Email (optional)<input type="text" name="email" value={3}></label>{7}
         <br>
         <input type="submit" value="sign up dude!">
     </form>
@@ -26,13 +26,14 @@ form = """
 
 class MainHandler(webapp2.RequestHandler):
 
-    def writeform(self, username="", password="", verify="", email="", error="", error_pw="", error_email=""):
+    def writeform(self, username="", password="", verify="", email="", error="", error_pw="",error_valid="", error_email=""):
          self.response.write(form.format(valid.escaped_html(username),
                                          valid.escaped_html(password),
                                          valid.escaped_html(verify),
                                          valid.escaped_html(email),
                                          error,
                                          error_pw,
+                                         error_valid,
                                          error_email))
 
     def get(self):
@@ -40,11 +41,12 @@ class MainHandler(webapp2.RequestHandler):
 
     def post(self):
 
-        # have_error = False
-        errorDict = {"username":"<b style=color:red;> Not a valid username </b>",
-                     "password":"<b style=color:red;> Not a valid password </b>",
-                     "pw_match":"<b style=color:red;> Passwords don't match </b>",
-                     "email":"<b style=color:red;> Not a valid email </b>"}
+        have_error = False
+
+        errorDict = {"username":"",
+                     "password":"",
+                     "pw_match":"",
+                     "email":""}
 
         # month_abbvs = dict((m[:3].lower(), m) for m in months) Sooooo Pythonic
 
@@ -55,25 +57,31 @@ class MainHandler(webapp2.RequestHandler):
         email = self.request.get("email")
 
         # verify the inputs
-        valid_username = valid.verify_username(username)
-        valid_password = valid.verify_password(password)
-        valid_email = valid.verify_email(email)
+        valid_username = valid.verify_username(valid.escaped_html(username))
+        valid_password = valid.verify_password(valid.escaped_html(password))
+        valid_email = valid.verify_email(valid.escaped_html(email))
 
         if not valid_username:
-            self.writeform(username, "", "", email, errorDict["username"])
+            have_error = True
+            errorDict["username"] = "<b style=color:red;> Not a valid username </b>"
 
-        elif not valid_password:
-            self.writeform(username, "", "", email, "", errorDict["password"])
+        if not valid_password:
+            have_error = True
+            errorDict["password"] = "<b style=color:red;> Not a valid password </b>"
 
-        elif password != password_check:
-            self.writeform(username, "", "", email, "", errorDict["pw_match"])
+        if password != password_check:
+            have_error = True
+            errorDict["pw_match"] = "<b style=color:red;> Passwords don't match </b>"
 
-        elif not valid_email:
-            self.writeform(username, "", "", email, "", "", errorDict["email"])
+        if not valid_email:
+            errorDict["email"] = "<b style=color:red;> Not a valid email </b>"
 
-        if valid_username and valid_password and valid_email:
+
+        if have_error == True:
+            self.writeform(username, "", "", email, errorDict["username"], errorDict["password"], errorDict["pw_match"], errorDict["email"])
+
+        if have_error == False:
             self.redirect('/welcome?username=' + username)
-
 
 class WelcomeHandler(webapp2.RequestHandler):
     def get(self):
